@@ -1,0 +1,34 @@
+#1. 作者，小说名称查询
+
+类型：get
+url：/api/queryName
+参数：name   =>  str  
+返回：json => [{
+    title: '飞天',
+    id: 22344,
+    prefix: 22,
+    suffix: 344,
+    author: '跃迁愁',
+    newtitle: '第五章',
+    lastTime: '2020-01-01'
+}]
+
+#2. 小说章节列表
+
+类型：get
+url：/api/queryChapterList
+参数：prefix => num, suffix => num
+返回：json => [{
+    title: '第五章',
+    id: 22344,
+}]
+
+#3.  小说章节 
+
+类型：get
+url：/api/queryChapter
+参数：prefix => num, suffix => num, id =>str
+返回：json => [{
+    title: '第五章',
+    text: 'awuifafuhwauiwfa',
+}]
