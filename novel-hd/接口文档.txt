@@ -17,7 +17,7 @@ url：/api/queryName
 
 类型：get
 url：/api/queryChapterList
-参数：prefix => num, suffix => num
+参数：prefix => num, bookId => num
 返回：json => [{
     title: '第五章',
     id: 22344,
@@ -27,8 +27,26 @@ url：/api/queryChapterList
 
 类型：get
 url：/api/queryChapter
-参数：prefix => num, suffix => num, id =>str
+参数：prefix => num, bookId => num, chapterId =>str
 返回：json => [{
     title: '第五章',
     text: 'awuifafuhwauiwfa',
 }]
+
+#4.  小说章节 
+
+类型：get
+url：/api/queryClass
+参数：className =>str
+返回：json => [{
+    title: '飞天',
+    id: 22344,
+    prefix: 22,
+    suffix: 344,
+    author: '跃迁愁',
+    newtitle: '第五章',
+    lastTime: '2020-01-01',
+    imgUrl: '...'
+}]
+
+

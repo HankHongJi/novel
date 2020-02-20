@@ -1,19 +1,11 @@
 <template>
     <div class="home">
-        <van-search
-            v-model="init.value"
-            show-action
-            placeholder="请输入搜索关键词或小说名称"
-            @search="onSearch"
-            >
-            <div slot="action" @click="onSearch">搜索</div>
-        </van-search>
         <van-card
-            v-for="(item, index) in init.list"
+            v-for="(item, index) in list"
             :key="index"
             :desc="`最新章节：${item.newtitle}`"
             :title="item.title"
-            :thumb="bgurl"
+            :thumb="item.imgUrl"
             @click="onRead(item)"
         >
             <div slot="tags" style="margin-top:28px">
@@ -36,18 +28,18 @@ export default {
         return {
             init: init,
             bgurl: require('../assets/bj.jpg'),
-           
+            query: this.$route.query,
+            list: []
         }
     },
     created(){
-        this.init.value = '',
-        this.init.list = Object.values(this.init.bookshelf);
+        this.onSearch()
         this.init.checkFull()
     },
     methods: {
         onSearch(){
-            this.$http.get(`/api/queryName?name=${this.init.value}`).then(({ data })=> {
-                this.init.list = data;
+            this.$http.get(`/api/queryClass?className=${this.query.className}`).then(({ data })=> {
+                this.list = data;
             })
         },
         onRead(item){

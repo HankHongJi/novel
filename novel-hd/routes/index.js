@@ -47,8 +47,8 @@ router.get('/api/queryName', function (req, res, next) {
 
 /* 小说章节列表 */
 router.get('/api/queryChapterList', function (req, res, next) {
-    let {prefix, suffix} = req.query;
-    let queryUrl = `${url}/du/${prefix}/${suffix}/`
+    let {prefix, bookId} = req.query;
+    let queryUrl = `${url}/du/${prefix}/${bookId}/`
     superagent.get(queryUrl)
         .end((err, sres) => {
             // 常规的错误处理
@@ -71,8 +71,8 @@ router.get('/api/queryChapterList', function (req, res, next) {
 
 /* 小说章节 */
 router.get('/api/queryChapter', function (req, res, next) {
-    let {prefix, suffix, id} = req.query;
-    let queryUrl = `${url}/du/${prefix}/${suffix}/${id}`
+    let {prefix, bookId, chapterId} = req.query;
+    let queryUrl = `${url}/du/${prefix}/${bookId}/${chapterId}`
     superagent.get(queryUrl)
         .end((err, sres) => {
             // 常规的错误处理
@@ -87,6 +87,38 @@ router.get('/api/queryChapter', function (req, res, next) {
                 title: $('h1').text(),
                 text: text
             })
+        });
+});
+
+/* 小说分类 */
+router.get('/api/queryClass', function (req, res, next) {
+    let {className} = req.query;
+    let queryUrl = `${url}${className}`
+    superagent.get(queryUrl)
+        .end((err, sres) => {
+            // 常规的错误处理
+            if (err) {
+                return next(err);
+            }
+            let $ = cheerio.load(sres.text);
+            let items = [];
+            $('.listBox li').each((idx, element) => {
+                let $element = $(element);
+                console.log($element.children('div').eq(2).html())
+                let id = $element.children('div').eq(2).find('a').attr('href').split('/')[3];
+                items.push({
+                    title: $element.children('a').text().replace(/》全集/ig,"").replace(/《/ig,""),
+                    id: id,
+                    prefix: id.slice(0, id.length - 3) || 0,
+                    suffix: id.slice(id.length - 3),
+                    author: $element.find('.s').text().split('：')[1],
+                    newtitle:$element.children('div').eq(2).find('a').text().replace(/最新章节：/ig,""),
+                    lastTime:  $element.find('.s').text().split('：')[4],
+                    imgUrl: url + $element.children('a').find('img').attr('src')
+                });
+            });
+
+            res.json(items)
         });
 });
 module.exports = router;

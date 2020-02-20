@@ -1,17 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
-    <title><%= htmlWebpackPlugin.options.title %></title>
-  </head>
-  <body>
-    <noscript>
-      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
-    </noscript>
-    <div id="app"></div>
-    <!-- built files will be auto injected -->
-  </body>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=0">
+	<link rel="icon" href="<%= BASE_URL %>favicon.ico">
+	<title>novel</title>
+
+	<style>
+		
+        .loading .mask {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 5000;
+            background: #7575753b;
+        }
+
+        .loading .animation {
+            position: fixed;
+            top: 45%;
+            left: 50%;
+            margin-left: -4em;
+            z-index: 6000;
+
+            padding: 0 2em;
+            background: #adadad3b;
+            border-radius: 10px;
+        }
+    
+        @keyframes lds-ellipsis3 {
+
+            0%,
+            25% {
+                left: 32px;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            50% {
+                left: 32px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            75% {
+                left: 100px;
+            }
+
+            100% {
+                left: 168px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+
+        @-webkit-keyframes lds-ellipsis3 {
+
+            0%,
+            25% {
+                left: 32px;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            50% {
+                left: 32px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            75% {
+                left: 100px;
+            }
+
+            100% {
+                left: 168px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+        }
+
+        @keyframes lds-ellipsis2 {
+            0% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            25%,
+            100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+        }
+
+        @-webkit-keyframes lds-ellipsis2 {
+            0% {
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            25%,
+            100% {
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+        }
+
+        @keyframes lds-ellipsis {
+            0% {
+                left: 32px;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            25% {
+                left: 32px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            50% {
+                left: 100px;
+            }
+
+            75% {
+                left: 168px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            100% {
+                left: 168px;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+        }
+
+        @-webkit-keyframes lds-ellipsis {
+            0% {
+                left: 32px;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+
+            25% {
+                left: 32px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            50% {
+                left: 100px;
+            }
+
+            75% {
+                left: 168px;
+                -webkit-transform: scale(1);
+                transform: scale(1);
+            }
+
+            100% {
+                left: 168px;
+                -webkit-transform: scale(0);
+                transform: scale(0);
+            }
+        }
+
+        .lds-ellipsis {
+            position: relative;
+        }
+
+        .lds-ellipsis>div {
+            position: absolute;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+        }
+
+        .lds-ellipsis div>div {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #f00;
+            position: absolute;
+            top: 100px;
+            left: 32px;
+            -webkit-animation: lds-ellipsis 1.7s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+            animation: lds-ellipsis 1.7s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+        }
+
+        .lds-ellipsis div:nth-child(1) div {
+            -webkit-animation: lds-ellipsis2 1.7s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+            animation: lds-ellipsis2 1.7s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+            background: #3ba4ec;
+        }
+
+        .lds-ellipsis div:nth-child(2) div {
+            -webkit-animation-delay: -0.85s;
+            animation-delay: -0.85s;
+            background: #ffdaa3;
+        }
+
+        .lds-ellipsis div:nth-child(3) div {
+            -webkit-animation-delay: -0.425s;
+            animation-delay: -0.425s;
+            background: #ef6262;
+        }
+
+        .lds-ellipsis div:nth-child(4) div {
+            -webkit-animation-delay: 0s;
+            animation-delay: 0s;
+            background: #ff7d94;
+        }
+
+        .lds-ellipsis div:nth-child(5) div {
+            -webkit-animation: lds-ellipsis3 1.7s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+            animation: lds-ellipsis3 1.7s cubic-bezier(0, 0.5, 0.5, 1) infinite forwards;
+            background: #3ba4ec;
+        }
+
+        .lds-ellipsis {
+            width: 65px !important;
+            height: 65px !important;
+            -webkit-transform: translate(-32.5px, -32.5px) scale(0.325) translate(32.5px, 32.5px);
+            transform: translate(-32.5px, -32.5px) scale(0.325) translate(32.5px, 32.5px);
+        }
+    
+	</style>
+	<script>
+		
+        window.onload = function () {
+            document.addEventListener('touchstart', function (event) {
+                if (event.touches.length > 1) {
+                    event.preventDefault();
+                }
+            });
+            var lastTouchEnd = 0;
+            document.addEventListener('touchend', function (event) {
+                const targetName = event.target.className;
+                var now = (new Date()).getTime();
+                if (now - lastTouchEnd <= 300) {
+                    event.preventDefault();
+                }
+                lastTouchEnd = now;
+            }, false);
+            document.addEventListener('gesturestart', function (event) {
+                event.preventDefault();
+            });
+        }
+    
+	</script>
+</head>
+
+<body>
+	<div id="app">
+
+		<div class="loading">
+			<div>
+				<div class="mask"></div>
+				<div class="animation">
+					<div class="lds-css ng-scope">
+					<div class="lds-ellipsis" style="width: 100%; height: 100%;">
+						<div>
+						<div></div>
+						</div>
+						<div>
+						<div></div>
+						</div>
+						<div>
+						<div></div>
+						</div>
+						<div>
+						<div></div>
+						</div>
+						<div>
+						<div></div>
+						</div>
+					</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- built files will be auto injected -->
+</body>
+
 </html>
