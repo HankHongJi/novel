@@ -47,6 +47,10 @@ export default {
     },
     created() {
         this.initFun();
+        localStorage.setItem( `readActive`, this.info.id)
+    },
+    destroyed() {
+        localStorage.setItem( `readActive`, '')
     },
     methods: {
         // 初始化
@@ -155,6 +159,7 @@ export default {
     }
     .van-nav-bar__text, .van-nav-bar .van-icon, .van-nav-bar__title{
         color: #fff;
+        font-size: 16px;
     }
 }
 

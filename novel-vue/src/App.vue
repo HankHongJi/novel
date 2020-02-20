@@ -16,9 +16,15 @@ export default {
     name: 'app',
     components:{LoadingApp, NavsApp},
     created() {
-        // this.$http.get('1/api/queryName?name=%E5%89%8D%E4%BB%BB').then(({ data })=> {
-        //     console.log(data)
-        // })
+        let readActive = localStorage.getItem( `readActive`)
+        let bookshelf = localStorage.getItem('bookshelf');
+
+        if(readActive && bookshelf){
+            let book = JSON.parse(bookshelf)[readActive];
+            if(book){
+                this.$router.push({path: '/read', query: book})
+            }
+        }
     },
 }
 </script>

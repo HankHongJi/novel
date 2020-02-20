@@ -30,6 +30,11 @@ export default {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped lang="scss">
-
+<style lang="scss">
+.van-tabbar-item__icon{
+    font-size: 20px;
+}
+.van-tabbar-item__text{
+    font-size: 16px;
+}
 </style>

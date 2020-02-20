@@ -111,7 +111,7 @@ router.get('/api/queryClass', function (req, res, next) {
                     id: id,
                     prefix: id.slice(0, id.length - 3) || 0,
                     suffix: id.slice(id.length - 3),
-                    author: $element.find('.s').text().split('：')[1],
+                    author: $element.find('.s').text().split('：')[1].replace(/大小/ig,""),
                     newtitle:$element.children('div').eq(2).find('a').text().replace(/最新章节：/ig,""),
                     lastTime:  $element.find('.s').text().split('：')[4],
                     imgUrl: url + $element.children('a').find('img').attr('src')
