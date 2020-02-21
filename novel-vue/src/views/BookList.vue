@@ -1,5 +1,13 @@
 <template>
     <div class="chapterList" ref="chapterList">
+        <div class="nav_box_list">
+            <van-nav-bar
+                :title="info.title"
+                left-text="返回"
+                left-arrow
+                @click-left="$router.go(-1)"
+            />
+        </div>
         <van-cell @click="goChapter(item, index)" :class="{'c-red':pageIndex > 0 && pageIndex == index }" v-for="(item, index) in chapterList" :key="index" :title="item.title" />
         <p class="tip no-more">没有更多数据</p>
     </div>
@@ -60,6 +68,7 @@ export default {
         url('../assets/skin-default-b.79f06.jpg') no-repeat center bottom,
         url('../assets/skin-default-m.35905.jpg') repeat-y center 119px;
         background-size: 100%;
+        padding-top: 46px;
         .van-cell{
             background-color: transparent;
             &.c-red{
@@ -67,6 +76,20 @@ export default {
                     color: red
                 }
             }
+        }
+        .nav_box_list{
+            position: fixed;
+            z-index: 99;
+            width: 100%;
+            top:0;
+            left: 0;
+        }
+        .van-nav-bar{
+            background-color: rgba(0,0,0,.9);
+        }
+        .van-nav-bar__text, .van-nav-bar .van-icon, .van-nav-bar__title{
+            color: #fff;
+            font-size: 16px;
         }
     }
 </style>

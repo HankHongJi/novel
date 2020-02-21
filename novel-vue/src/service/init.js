@@ -36,6 +36,10 @@ export default new Vue({
                 isFull = false
             }
             return isFull
+        },
+        // 根据id获取小说图片地址
+        getImgUrl(id){
+            return `http://www.xqishuta.com/files/article/image/${id.slice(0, id.length - 3) || 0}/${id}/${id}s.jpg`
         }
     }
 })

@@ -33,11 +33,11 @@ url：/api/queryChapter
     text: 'awuifafuhwauiwfa',
 }]
 
-#4.  小说章节 
+#4.  小说分类
 
 类型：get
 url：/api/queryClass
-参数：className =>str
+参数：className =>str  page => num
 返回：json => [{
     title: '飞天',
     id: 22344,

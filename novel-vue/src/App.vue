@@ -172,6 +172,9 @@ html,body{
     .van-card__title, .van-card__desc{
         line-height: 20px
     }
+    .van-nav-bar__text:active{
+        background-color: transparent;
+    }
 }
 
 

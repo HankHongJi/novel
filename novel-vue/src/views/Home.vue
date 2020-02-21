@@ -13,7 +13,7 @@
             :key="index"
             :desc="`最新章节：${item.newtitle}`"
             :title="item.title"
-            :thumb="bgurl"
+            :thumb="init.getImgUrl(item.id)"
             @click="onRead(item)"
         >
             <div slot="tags" style="margin-top:28px">

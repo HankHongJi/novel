@@ -92,8 +92,8 @@ router.get('/api/queryChapter', function (req, res, next) {
 
 /* 小说分类 */
 router.get('/api/queryClass', function (req, res, next) {
-    let {className} = req.query;
-    let queryUrl = `${url}${className}`
+    let {className, page, code} = req.query;
+    let queryUrl = `${url}${className}index_${page}.html`
     superagent.get(queryUrl)
         .end((err, sres) => {
             // 常规的错误处理
@@ -102,22 +102,38 @@ router.get('/api/queryClass', function (req, res, next) {
             }
             let $ = cheerio.load(sres.text);
             let items = [];
-            $('.listBox li').each((idx, element) => {
-                let $element = $(element);
-                console.log($element.children('div').eq(2).html())
-                let id = $element.children('div').eq(2).find('a').attr('href').split('/')[3];
-                items.push({
-                    title: $element.children('a').text().replace(/》全集/ig,"").replace(/《/ig,""),
-                    id: id,
-                    prefix: id.slice(0, id.length - 3) || 0,
-                    suffix: id.slice(id.length - 3),
-                    author: $element.find('.s').text().split('：')[1].replace(/大小/ig,""),
-                    newtitle:$element.children('div').eq(2).find('a').text().replace(/最新章节：/ig,""),
-                    lastTime:  $element.find('.s').text().split('：')[4],
-                    imgUrl: url + $element.children('a').find('img').attr('src')
+            if(code != 0){
+                let $sideBox = $('.side-box .ph ul');
+                console.log($sideBox)
+                $sideBox.eq(code - 1).find('li').each((idx, element) => {
+                    let $element = $(element);
+                    let id = $element.find('a').attr('href').replace(/[^0-9]/ig,"");
+                    items.push({
+                        title: $element.find('a').text().replace(/》全集/ig,"").replace(/《/ig,""),
+                        id: id,
+                        prefix: id.slice(0, id.length - 3) || 0,
+                        suffix: id.slice(id.length - 3),
+                        author: $element.find('em').text(),
+                        newtitle: '',
+                        lastTime:  ''
+                    });
                 });
-            });
-
+            }else{
+                $('.listBox li').each((idx, element) => {
+                    let $element = $(element);
+                    let id = $element.children('div').eq(2).find('a').attr('href').split('/')[3];
+                    items.push({
+                        title: $element.children('a').text().replace(/》全集/ig,"").replace(/《/ig,""),
+                        id: id,
+                        prefix: id.slice(0, id.length - 3) || 0,
+                        suffix: id.slice(id.length - 3),
+                        author: $element.find('.s').text().split('：')[1].replace(/大小/ig,""),
+                        newtitle:$element.children('div').eq(2).find('a').text().replace(/最新章节：/ig,""),
+                        lastTime:  $element.find('.s').text().split('：')[4]
+                    });
+                });
+            }
+          
             res.json(items)
         });
 });

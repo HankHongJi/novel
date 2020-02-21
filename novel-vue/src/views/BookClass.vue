@@ -22,6 +22,7 @@ export default {
             value: '',
             bgurl: require('../assets/bj.jpg'),
             list: [
+                { name: '热门', className: '/s/hot/' },
                 { name: '玄幻奇幻', className: '/soft/sort01/' },
                 { name: '武侠仙侠', className: '/soft/sort02/' },
                 { name: '女频言情', className: '/soft/sort03/' },
@@ -52,6 +53,7 @@ export default {
 
 <style lang="scss">
     .book-class{
+        padding-top: 2em;
         .van-icon__image{
             width: 2.5em;
             height: 2.5em;

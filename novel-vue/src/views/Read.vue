@@ -10,7 +10,23 @@
                 @click-right="$router.push({path: '/list', query: info})"
             />
         </div>
-        <div class="content" ref="content" @click="openNav = !openNav" @scroll.passive="getScroll($event)">
+        
+        <div class="nav_footer" :style="{bottom: openNav ? 0 : '-46px'}">
+            <van-nav-bar>
+                <div slot="left" flex>
+                    <span>自动：</span>
+                    <van-stepper v-model="speed"  @change="onChangeSpeed"/>
+                </div>
+                <div slot="title" >
+                    <van-button @click="isAuto = !isAuto" size="small" type="default">{{isAuto ? '自动': '手动'}}</van-button>
+                </div>
+                <div slot="right" flex>
+                    <span>字号：</span>
+                    <van-stepper v-model="fontSize" @change="onChange"/>
+                </div>
+            </van-nav-bar>
+        </div>
+        <div class="content" :style="{fontSize: `${fontSize}px`}" ref="content" @click="openNavFun" @scroll.passive="getScroll($event)">
             <div class="item" v-for="(item, index) in bookData.chapter" :key="index" >
                 <h3>{{item.title}}</h3>
                 <div class="chapter" v-html="item.text"></div>
@@ -23,8 +39,8 @@
 <script>
 import Vue from 'vue';
 import init from '@/service/init'
-import { NavBar, Dialog } from 'vant';
-Vue.use(Dialog).use(NavBar)
+import { NavBar, Dialog, Stepper, Button  } from 'vant';
+Vue.use(Dialog).use(NavBar).use(Stepper).use(Button)
 export default {
     name: "read",
     data() {
@@ -42,17 +58,45 @@ export default {
                 chapter: [],
                 chapterList: [],
                 scrollTop: 0 
-            }
+            },
+            fontSize: localStorage.getItem('fontSize') - 0 || 20,
+            timer: null,
+            speed: localStorage.getItem('speed') - 0 || 50,
+            isAuto: false
         }
     },
     created() {
         this.initFun();
-        localStorage.setItem( `readActive`, this.info.id)
+        localStorage.setItem( `readActive`, this.info.id);
     },
     destroyed() {
         localStorage.setItem( `readActive`, '')
     },
     methods: {
+        openNavFun(){
+            this.openNav = !this.openNav;
+            if(this.openNav){
+                clearInterval(this.timer);
+            }else{
+                if(this.isAuto)this.autoScroll();
+            }
+
+        },
+        // 懒人模式
+        autoScroll(){
+            this.timer = setInterval(()=>{
+                let scrollTop = this.$refs.content.scrollTop; 
+                this.$refs.content.scrollTop = scrollTop + 1;
+                this.getScroll();
+            }, this.speed)
+        },
+        onChangeSpeed(){
+            localStorage.setItem('speed', this.speed)
+        },
+        onChange(){
+            localStorage.setItem('fontSize', this.fontSize)
+        },
+        
         // 初始化
         initFun(){
             let bookData = localStorage.getItem( `bookData${this.info.id}`);
@@ -93,11 +137,12 @@ export default {
         // 滑动事件
         getScroll(event) {
             // 滚动条距离底部的距离scrollBottom
+            let $content = this.$refs.content;
             let scrollBottom =
-                event.target.scrollHeight -
-                event.target.scrollTop -
-                event.target.clientHeight;
-            this.bookData.scrollTop = event.target.scrollTop;
+                $content.scrollHeight -
+                $content.scrollTop -
+                $content.clientHeight;
+            this.bookData.scrollTop = $content.scrollTop;
             if (scrollBottom < 300 && !this.loading) {
                 this.getChapter()
             }
@@ -131,7 +176,6 @@ export default {
 .read{
     height: 100%;
     .item{
-        font-size: 20px;
         h3{
             padding-left: 1em;
             font-size: 24px;
@@ -154,12 +198,37 @@ export default {
         top:-46px;
         transition:  top .3s;
     }
+    .van-nav-bar__right, .van-nav-bar__left{
+        color: #fff
+    }
+    .nav_footer{
+        position: fixed;
+        z-index: 99;
+        width: 100%;
+        bottom:-46px;
+        transition:  bottom .3s;
+        .van-button--small{
+            height:28px;
+        }
+        .van-nav-bar__left{
+            left: 5px;
+        }
+        .van-nav-bar__right{
+            right: 5px;
+        }
+        .van-button__text{
+            font-size: 14px;
+        }
+    }
     .van-nav-bar{
         background-color: rgba(0,0,0,.9);
     }
     .van-nav-bar__text, .van-nav-bar .van-icon, .van-nav-bar__title{
         color: #fff;
         font-size: 16px;
+    }
+    .van-stepper__input{
+        line-height: 28px;
     }
 }
 
